@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso Administrador - Castingred</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+
+// Configuración de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBQmYwkqr29lvaF8ew3BJ2suc5UxRaVU1Y",
+  authDomain: "castingred-a6f6e.firebaseapp.com",
+  projectId: "castingred-a6f6e",
+  storageBucket: "castingred-a6f6e.appspot.com",
+  messagingSenderId: "61701399093",
+  appId: "1:61701399093:web:678b77ff06ce83e1a1077c",
+  measurementId: "G-J1QPG9HXGZ"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("formAdmin");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPass").value;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      // Solo permitir acceso a este correo
+      if (userCredential.user.email === "vm20936@gmail.com") {
+        // Redirigir al panel de actores
+        window.location.href = "paneldeactores.html";
+      } else {
+        alert("No tienes permisos de administrador");
+      }
+
+    } catch (error) {
+      alert("Error de acceso: " + error.message);
+    }
+  });
+});
+</script>
+<style>
+body { font-family:'Segoe UI',sans-serif; margin:0; padding:0; display:flex; justify-content:center; align-items:center; min-height:100vh; background: linear-gradient(135deg, #fcb69f, #ffecd2);}
+.container { background:white; padding:40px; border-radius:20px; width:400px; box-shadow:0 12px 25px rgba(0,0,0,0.15);}
+h2 { text-align:center; margin-bottom:25px; color:#333;}
+input { width:100%; padding:12px; margin-bottom:15px; border-radius:12px; border:1px solid #ccc; font-size:1rem;}
+button { width:100%; padding:12px; border-radius:12px; border:none; background-color:#857e7c; color:white; font-size:1.1rem; cursor:pointer; transition:0.3s;}
+button:hover { background-color:#6c5d59;}
+a { display:block; text-align:center; margin-top:15px; color:#e3aea2; text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Ingreso Administrador</h2>
+  <form id="formAdmin">
+    <input type="email" id="adminEmail" placeholder="Correo administrador" required>
+    <input type="password" id="adminPass" placeholder="Contraseña" required>
+    <button type="submit">Entrar</button>
+  </form>
+  <a href="index.html">Volver al registro</a>
+</div>
+</body>
+</html>

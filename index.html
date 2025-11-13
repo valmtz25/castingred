@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Actores - Castingred</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      width: 400px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    /* Foto de encabezado rectangular */
+    .header-img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background-color: #ff7e5f;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff5a36;
+    }
+
+    a {
+      display: block;
+      margin-top: 15px;
+      color: #ff5a36;
+      text-decoration: none;
+    }
+
+    /* Redes sociales */
+    .redes {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .icono-redes {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.2s;
+    }
+
+    .icono-redes:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Foto de encabezado rectangular -->
+    <img src="images/foto_actor.jpg" alt="Encabezado" class="header-img">
+
+    <h2>Regístrate como Actor</h2>
+
+    <form id="formActor">
+      <input type="text" id="nombreCompleto" placeholder="Nombre completo" required>
+      <input type="number" id="edad" placeholder="Edad" required>
+      <select id="genero" required>
+        <option value="">Seleccione género</option>
+        <option value="Femenino">Femenino</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <input type="text" id="telefono" placeholder="Teléfono" required>
+      <input type="email" id="correo" placeholder="Correo" required>
+      <textarea id="experiencia" placeholder="Describe tu experiencia"></textarea>
+      <input type="text" id="rolPreferido" placeholder="Rol preferido (opcional)">
+      <input type="url" id="portafolioDigital" placeholder="Enlace a tu portafolio digital (opcional)">
+      <button type="submit">Registrarme</button>
+    </form>
+
+    <a href="login.html">¿Eres administrador? Inicia sesión</a>
+
+    <!-- Redes sociales -->
+    <div class="redes">
+      <a href="https://www.facebook.com/ckevinmoncada" target="_blank">
+        <img src="images/logofacebook.png" alt="Facebook" class="icono-redes">
+      </a>
+      <a href="https://www.instagram.com/ckevinbrands/" target="_blank">
+        <img src="images/logoinstagram.jpg" alt="Instagram" class="icono-redes">
+      </a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQmYwkqr29lvaF8ew3BJ2suc5UxRaVU1Y",
+      authDomain: "castingred-a6f6e.firebaseapp.com",
+      projectId: "castingred-a6f6e",
+      storageBucket: "castingred-a6f6e.appspot.com",
+      messagingSenderId: "61701399093",
+      appId: "1:61701399093:web:678b77ff06ce83e1a1077c",
+      measurementId: "G-J1QPG9HXGZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const formActor = document.getElementById("formActor");
+
+      formActor.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const actor = {
+          nombreCompleto: document.getElementById("nombreCompleto").value,
+          edad: Number(document.getElementById("edad").value),
+          genero: document.getElementById("genero").value,
+          telefono: document.getElementById("telefono").value,
+          correo: document.getElementById("correo").value,
+          experiencia: document.getElementById("experiencia").value,
+          rolPreferido: document.getElementById("rolPreferido").value,
+          portafolioDigital: document.getElementById("portafolioDigital").value
+        };
+
+        try {
+          await addDoc(collection(db, "actores"), actor);
+          alert("Registro exitoso. Tu solicitud será revisada por el administrador.");
+          formActor.reset();
+        } catch (error) {
+          alert("Error al registrar: " + error.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
